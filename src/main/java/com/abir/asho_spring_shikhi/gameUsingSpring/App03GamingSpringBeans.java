@@ -1,12 +1,27 @@
 package com.abir.asho_spring_shikhi.gameUsingSpring;
 
-import com.abir.asho_spring_shikhi.gameUsingSpring.GameRunner;
-import com.abir.asho_spring_shikhi.game.PacmanGame;
-import org.springframework.boot.autoconfigure.web.reactive.HttpHandlerAutoConfiguration;
+import com.abir.asho_spring_shikhi.game.GamingConsole;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+
+@Configuration //indicates that this class contains bean definitions.
+@ComponentScan("com.abir.asho_spring_shikhi.gameUsingSpring") /*  tells Spring to scan the specified package for any classes
+                                                                annotated with @Component, @Service, @Repository, etc. */
 public class App03GamingSpringBeans {
 
-        public static void main(String[] args) {
+    @Bean
+    public GameRunner gameRunner( GamingConsole game) {  /*The method parameter 'GamingConsole game' tells Spring to inject the GamingConsole bean
+                                                        (which is implemented by PacmanGame) into the GameRunner constructor. */
+        System.out.println("Parameter : " + game);
+        return new GameRunner(game);
+    }
+
+
+    public static void main(String[] args) {
             /*
             The AnnotationConfigApplicationContext in the next line is
             used to create the Spring context, passing GamingConfiguration.class as the configuration class.
@@ -14,7 +29,7 @@ public class App03GamingSpringBeans {
             (game and gameRunner) in the context.
              */
             var context =
-                    new AnnotationConfigApplicationContext(GamingConfiguration.class);
+                    new AnnotationConfigApplicationContext(App03GamingSpringBeans.class);
 
             /*
             context.getBean(GameRunner.class) retrieves the GameRunner bean from the Spring context.
@@ -28,25 +43,26 @@ public class App03GamingSpringBeans {
 
 
 /*
-How Spring Handles It:
+Behind the Scenes: How Spring Handles This
 
-1. Configuration Class Scanning:
-When the Spring context is initialized, Spring scans the GamingConfiguration class for any methods annotated with @Bean.
-It finds the game() and gameRunner(GamingConsole game) methods and registers the returned objects as beans.
+1.Component Scanning:
+When Spring starts up (via AnnotationConfigApplicationContext), it scans the package specified in @ComponentScan.
+It looks for classes annotated with @Component, @Service, @Repository, or @Controller. When it finds PacmanGame, it registers this class as a bean in the application context.
 
-2. Bean Creation and Dependency Injection:
-Spring first creates the GamingConsole bean by calling the game() method, which returns a PacmanGame instance.
-Next, when creating the GameRunner bean, Spring automatically injects the GamingConsole bean (PacmanGame) into the gameRunner(GamingConsole game) method.
+2. Bean Creation:
+Spring then creates an instance of the PacmanGame class. This happens during the context initialization, even before any beans are explicitly requested.
+The PacmanGame bean is stored in the application context, a central container that manages all beans.
 
-3. Bean Retrieval and Execution:
-When context.getBean(GameRunner.class) is called, Spring returns the GameRunner bean from its container.
-The run() method of GameRunner is then executed, using the injected GamingConsole (PacmanGame) to perform its tasks.
+3. Dependency Injection:
+When you define a method like gameRunner(GamingConsole game) in the configuration class, Spring sees that the gameRunner bean needs a GamingConsole bean.
+Spring checks its context, finds the PacmanGame bean (since it implements GamingConsole), and injects it into the GameRunner constructor.
+
+4.Lifecycle Management:
+Spring manages the lifecycle of the beans. When the context is initialized, Spring creates all the necessary beans (like PacmanGame and GameRunner).
+When the context is closed, Spring will also destroy the beans if necessary, handling any cleanup or resource management.
  */
 
-/*
-GamingConsole interface is implemented by PacmanGame.
-GameRunner is dependent on GamingConsole. Because it has member variable of GamingConsole type.
-So, we need to create GamingConsole bean first.
-Then we can create GameRunner bean.
-Then we can run the game.
- */
+
+
+
+
