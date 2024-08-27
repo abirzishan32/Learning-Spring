@@ -12,7 +12,6 @@ public class GameRunner {
 
     public void run() {
         System.out.println("Game is running : " + game);
-
         game.up();
         game.down();
         game.left();

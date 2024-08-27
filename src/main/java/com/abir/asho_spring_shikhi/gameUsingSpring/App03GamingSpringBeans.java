@@ -14,3 +14,11 @@ public class App03GamingSpringBeans {
 
         }
 }
+
+/*
+GamingConsole interface is implemented by PacmanGame.
+GameRunner is dependent on GamingConsole. Because it has member variable of GamingConsole type.
+So, we need to create GamingConsole bean first.
+Then we can create GameRunner bean.
+Then we can run the game.
+ */
