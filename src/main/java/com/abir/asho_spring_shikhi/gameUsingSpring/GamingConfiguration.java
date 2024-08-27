@@ -8,7 +8,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GamingConfiguration {
 
-    //GamingConsole is needed in AnnotationConfigApplicationContext
+    /*
+    These methods are annotated with @Bean,
+    indicating that Spring should treat the return values of these methods
+    as beans managed by the Spring container.
+     */
+
+
+    /*GamingConsole is needed in AnnotationConfigApplicationContext.
+    Spring registers this instance as a bean in the context with the name game.
+     */
     @Bean
     public GamingConsole game(){
         return new PacmanGame();
