@@ -6,6 +6,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 
 @Configuration //indicates that this class contains bean definitions.
@@ -61,6 +62,7 @@ Spring checks its context, finds the PacmanGame bean (since it implements Gaming
 Spring manages the lifecycle of the beans. When the context is initialized, Spring creates all the necessary beans (like PacmanGame and GameRunner).
 When the context is closed, Spring will also destroy the beans if necessary, handling any cleanup or resource management.
  */
+
 
 
 
